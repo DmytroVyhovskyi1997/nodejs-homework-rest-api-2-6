@@ -1,8 +1,8 @@
-const express = require('express');
-const contacts = require('../../models/contacts');
+const express = require("express");
+const contacts = require("../../models/contacts");
 const router = express.Router();
 const Joi = require("joi");
-const {HttpError} = require('../../helpers/HttpError');
+const { HttpError } = require("../../helpers/HttpError");
 
 const addSchema = Joi.object({
   name: Joi.string().required(),
@@ -10,7 +10,7 @@ const addSchema = Joi.object({
   phone: Joi.string().required(),
 });
 
-router.get('/', async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
     const result = await contacts.listContacts();
     res.json(result);
@@ -19,12 +19,12 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/:id', async (req, res, next) => {
+router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await contacts.getContactById(id);
     if (!result) {
-      throw new HttpError(404, 'Not found');
+      throw new HttpError(404, "Not found");
     }
     res.json(result);
   } catch (error) {
@@ -32,7 +32,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
@@ -45,7 +45,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
@@ -54,7 +54,7 @@ router.put('/:id', async (req, res, next) => {
     const { id } = req.params;
     const result = await contacts.updateContact(id, req.body);
     if (!result) {
-      throw new HttpError(404, 'Not found');
+      throw new HttpError(404, "Not found");
     }
     res.json(result);
   } catch (error) {
@@ -62,15 +62,15 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
     const result = await contacts.removeContact(id);
     if (!result) {
-      throw new HttpError(404, 'Not found');
+      throw new HttpError(404, "Not found");
     }
     res.json({
-      message: "Delete success"
+      message: "Delete success",
     });
   } catch (error) {
     next(error);
@@ -78,5 +78,3 @@ router.delete('/:id', async (req, res, next) => {
 });
 
 module.exports = router;
-
-
